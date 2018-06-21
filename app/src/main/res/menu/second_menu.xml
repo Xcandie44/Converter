@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/menugroupid">
+
+        <item
+            android:title="Нанометры"
+            android:id="@+id/menu1" />
+
+        <item
+            android:title="Микрометры"
+            android:id="@+id/menu2" />
+
+        <item
+            android:title="Миллиметры"
+            android:id="@+id/menu3" />
+
+        <item
+            android:title="Сантиметры"
+            android:id="@+id/menu4" />
+
+        <item
+            android:title="Дециметры"
+            android:id="@+id/menu5" />
+
+        <item
+            android:title="Метры"
+            android:id="@+id/menu6" />
+
+        <item
+            android:title="Километры"
+            android:id="@+id/menu7" />
+
+        <item
+            android:title="Дюймы"
+            android:id="@+id/menu8" />
+
+        <item
+            android:title="Футы"
+            android:id="@+id/menu9" />
+
+        <item
+            android:title="Ярды"
+            android:id="@+id/menu10" />
+
+        <item
+            android:title="Мили"
+            android:id="@+id/menu11" />
+
+        <item
+            android:title="Морские мили"
+            android:id="@+id/menu12" />
+
+    </group>
+
+
+</menu>
