@@ -17,20 +17,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="#A39999">
 
             <Button
                 android:id="@+id/button"
+                style="@android:style/Widget.Button.Inset"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="onClick1"
+                android:textSize="20sp"
                 android:text="Метры" />
 
             <Button
                 android:id="@+id/button2"
+                style="@android:style/Widget.Button.Inset"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="20sp"
                 android:layout_weight="1"
                 android:onClick="onClick2"
                 android:text="Метры" />
@@ -48,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:onClick="onTvClick"
-                android:textSize="35sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -67,8 +72,7 @@
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#A39999">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -78,6 +82,7 @@
 
             <Button
                 android:id="@+id/b7"
+                style="@android:style/Widget.Material.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -87,6 +92,7 @@
 
             <Button
                 android:id="@+id/b8"
+                style="@android:style/Widget.Button.Inset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -96,6 +102,7 @@
 
             <Button
                 android:id="@+id/b9"
+                style="@android:style/Widget.Button.Inset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -112,6 +119,7 @@
 
             <Button
                 android:id="@+id/b4"
+                style="@android:style/Widget.Button.Inset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -121,6 +129,7 @@
 
             <Button
                 android:id="@+id/b5"
+                style="@android:style/Widget.Button.Inset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -130,6 +139,7 @@
 
             <Button
                 android:id="@+id/b6"
+                style="@android:style/Widget.Button.Inset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -146,6 +156,7 @@
 
             <Button
                 android:id="@+id/b1"
+                style="@android:style/Widget.Button.Inset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -155,6 +166,7 @@
 
             <Button
                 android:id="@+id/b2"
+                style="@android:style/Widget.Button.Inset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -164,6 +176,7 @@
 
             <Button
                 android:id="@+id/b3"
+                style="@android:style/Widget.Button.Inset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -180,6 +193,7 @@
 
             <Button
                 android:id="@+id/b0"
+                style="@android:style/Widget.Button.Inset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -189,6 +203,7 @@
 
             <Button
                 android:id="@+id/b_point"
+                style="@android:style/Widget.Button.Inset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -198,11 +213,12 @@
 
             <Button
                 android:id="@+id/b_del"
+                style="@android:style/Widget.Button.Inset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="onClick"
-                android:text="c"
+                android:text="С"
                 android:textSize="26sp" />
         </LinearLayout>
     </LinearLayout>

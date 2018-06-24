@@ -1,9 +1,11 @@
 package com.example.pechn.converter;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -65,6 +67,23 @@ public class MainActivity extends AppCompatActivity {
         id1=R.id.menu6;
         id2=R.id.menu6;
         //tv.setText(Double.toString(raw*(COEFFICIENT_KILOMETER/COEFFICIENT_DECIMETER)));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.settings_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.settings:
+                Intent intent = new Intent(this,Settings.class);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void onTvClick(View v){
