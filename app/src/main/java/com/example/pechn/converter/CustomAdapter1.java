@@ -12,15 +12,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomAdapter extends ArrayAdapter<SettingsList> {
+public class CustomAdapter1 extends ArrayAdapter<SettingsList1> {
 
     private Context mContext;
-    private List<SettingsList> SettingsList = new ArrayList<>();
+    private List<SettingsList1> SettingsList1 = new ArrayList<>();
 
-    public CustomAdapter(Context context,ArrayList<SettingsList> list){
+    public CustomAdapter1(Context context, ArrayList<SettingsList1> list){
         super(context,0,list);
         mContext = context;
-        SettingsList = list;
+        SettingsList1 = list;
     }
 
     @NonNull
@@ -31,7 +31,7 @@ public class CustomAdapter extends ArrayAdapter<SettingsList> {
             listItem = LayoutInflater.from(mContext).inflate(R.layout.first_list_item,parent,false);
         }
 
-        SettingsList currentSetting = SettingsList.get(position);
+        SettingsList1 currentSetting = SettingsList1.get(position);
 
         TextView text1 =  listItem.findViewById(R.id.tv1);
         text1.setText(currentSetting.getText1());

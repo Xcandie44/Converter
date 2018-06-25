@@ -1,6 +1,8 @@
 package com.example.pechn.converter;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +20,9 @@ import org.w3c.dom.Text;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+
+import static com.example.pechn.converter.Settings.APP_PREFERENCES;
+import static com.example.pechn.converter.Settings.THEME_PREFERENCES;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,11 +44,32 @@ public class MainActivity extends AppCompatActivity {
     final static double COEFFICIENT_YARD = 0.9144;
     final static double COEFFICIENT_MILE = 1609.344;
     final static double COEFFICIENT_SEAMILE = 1852;
-    int id1,id2;
+    int id1,id2,themeId=0;
     DecimalFormat df;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
+    public static final String APP_PREFERENCES = "settings";
+    public static final String THEME_PREFERENCES = "theme";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        preferences = getSharedPreferences(APP_PREFERENCES,MODE_PRIVATE);
+        if(preferences.contains(THEME_PREFERENCES)){
+            themeId = preferences.getInt(THEME_PREFERENCES,0);
+            if(themeId==0){
+                setTheme(R.style.Light);
+            }else if(themeId==1){
+                setTheme(R.style.Dark);
+            }
+        }else {
+            Intent i = getIntent();
+            themeId = i.getIntExtra("Theme", 0);
+            if (themeId == 1) {
+                setTheme(R.style.Dark);
+            }
+            editor.putInt(THEME_PREFERENCES,themeId);
+            editor.apply();
+        }
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
@@ -52,22 +78,18 @@ public class MainActivity extends AppCompatActivity {
         tv1 = findViewById(R.id.textView1);
         tv2 = findViewById(R.id.textView2);
         bp = findViewById(R.id.b_point);
-       // et1 = findViewById(R.id.editText3);
         df = new DecimalFormat("#.############");
         df.setRoundingMode(RoundingMode.CEILING);
         tv1.setTextColor(Color.RED);
         tv2.setTextColor(Color.BLACK);
         tv1.setText("0");
         tv2.setText("0");
-      //  tv.setText(df.format(raw1));
-        //raw1 = et1.getText();
         String r;
-       // r = et1.getText().toString();
-       // raw1 = Double.valueOf(r);
         id1=R.id.menu6;
         id2=R.id.menu6;
-        //tv.setText(Double.toString(raw*(COEFFICIENT_KILOMETER/COEFFICIENT_DECIMETER)));
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -80,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId()){
             case R.id.settings:
                 Intent intent = new Intent(this,Settings.class);
+                finish();
                 startActivity(intent);
                 break;
         }
