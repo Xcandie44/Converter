@@ -3,4 +3,11 @@
     <string name="settings">Settings</string>
     <string name="general">General</string>
     <string name="sounds">Sounds</string>
+
+    <string-array name="menu1">
+        <item>Theme</item>
+        <item>Language</item>
+        <item>Sounds</item>
+    </string-array>
+
 </resources>

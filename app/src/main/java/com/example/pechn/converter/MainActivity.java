@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import org.w3c.dom.Text;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 import static com.example.pechn.converter.Settings.APP_PREFERENCES;
 import static com.example.pechn.converter.Settings.THEME_PREFERENCES;
@@ -46,14 +48,34 @@ public class MainActivity extends AppCompatActivity {
     final static double COEFFICIENT_SEAMILE = 1852;
     int id1,id2,themeId=0;
     DecimalFormat df;
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
+    SharedPreferences preferences, langPreferences;
+    SharedPreferences.Editor editor ,editorLang;
     public static final String APP_PREFERENCES = "settings";
     public static final String THEME_PREFERENCES = "theme";
+    public static final String LANGUAGE_PREFERENCES = "lang";
+    String lang;
+    Locale locale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         preferences = getSharedPreferences(APP_PREFERENCES,MODE_PRIVATE);
+        langPreferences = getSharedPreferences(APP_PREFERENCES,MODE_PRIVATE);
+        if (langPreferences.contains(LANGUAGE_PREFERENCES)){
+            lang = langPreferences.getString("lang", "default");
+            if (lang.equals("default")) {
+                lang = getResources().getConfiguration().locale.getCountry();
+            }
+        }else {
+            Intent i = getIntent();
+            lang = i.getStringExtra("lang");
+            editorLang.putString(LANGUAGE_PREFERENCES,lang);
+            editorLang.apply();
+        }
+        locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, null);
         if(preferences.contains(THEME_PREFERENCES)){
             themeId = preferences.getInt(THEME_PREFERENCES,0);
             if(themeId==0){
@@ -556,4 +578,15 @@ public class MainActivity extends AppCompatActivity {
                 });
         popupMenu.show();
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, null);
+        super.onConfigurationChanged(newConfig);
+    }
+
 }

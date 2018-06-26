@@ -6,6 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,24 +23,46 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Settings extends AppCompatActivity {
-    final String[] arr1 = new String[]{"Тема","Язык","Звук"};
+    String[] arr1 ;
     final String[] arr2 = new String[]{"Тема приложения","Необходимо полностью перезапустить\nприложение для принятия изменений","Звук нажатия на клавиатуру"};
     ListView lv1,lv2;
     private CustomAdapter1 adapter1;
     private CustomAdapter2 adapter2;
-    private SharedPreferences preferences;
-    SharedPreferences.Editor editor;
+    private SharedPreferences preferences,languagePreferences;
+    SharedPreferences.Editor editor, editorLang;
     public static final String APP_PREFERENCES = "settings";
     public static final String THEME_PREFERENCES = "theme";
+    public static final String LANGUAGE_PREFERENCES = "lang";
     RadioGroup radioGroup;
-    int savedRadioIndex,themeId=0;
+    int savedRadioIndex,themeId=0, languageId=0;
     RadioButton rb;
+    private Locale locale;
+    String lang;
+    SoundPool soundPool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         preferences = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        languagePreferences=getSharedPreferences(APP_PREFERENCES,Context.MODE_PRIVATE);
+        if(languagePreferences.contains(LANGUAGE_PREFERENCES)) {
+            lang = languagePreferences.getString("lang", "default");
+            if (lang.equals("default")) {
+                languageId = 0;
+                lang = getResources().getConfiguration().locale.getCountry();
+            } else if (lang.equals("ru")) {
+                languageId = 1;
+            } else if (lang.equals("en")) {
+                languageId = 2;
+            }
+            locale = new Locale(lang);
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            getBaseContext().getResources().updateConfiguration(config, null);
+        }
         if(preferences.contains(THEME_PREFERENCES)){
             themeId = preferences.getInt(THEME_PREFERENCES,0);
             if(themeId==0){
@@ -51,6 +77,7 @@ public class Settings extends AppCompatActivity {
         lv1 = findViewById(R.id.first_list);
         lv2 = findViewById(R.id.second_list);
         getSupportActionBar().hide();
+        arr1 = getResources().getStringArray(R.array.menu1);
         radioGroup = findViewById(R.id.radiogroup);
         rb = findViewById(R.id.dark);
         ArrayList<SettingsList1> arrayList1 = new ArrayList<>();
@@ -70,18 +97,18 @@ public class Settings extends AppCompatActivity {
                         onThemeClick();
                         break;
                     case 1:
+                        onLanguageClick();
                         break;
                 }
             }
         });
         editor = preferences.edit();
-
+        editorLang = languagePreferences.edit();
+        AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
+        soundPool = new SoundPool(5,AudioManager.STREAM_MUSIC,0);
+        //soundPool.load(this,R.raw.click,0);
 
     }
-
-
-
-
 
 
     public void onThemeClick(){
@@ -129,8 +156,63 @@ public class Settings extends AppCompatActivity {
     public void onBackPressed(){
         Intent intent = new Intent(this,MainActivity.class);
         intent.putExtra("Theme",themeId);
+        intent.putExtra("lang",lang);
         finish();
         startActivity(intent);
     }
+
+    public void onLanguageClick(){
+        final String[] themeArray = {"По умолчанию", "Русский","Английский"};
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Выберите язык");
+        builder
+                .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+
+                })
+                .setSingleChoiceItems(themeArray, languageId, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0:
+                                languageId=0;
+                                lang="default";
+                                editorLang.putString(LANGUAGE_PREFERENCES,lang);
+                                editorLang.apply();
+                                dialog.cancel();
+                                break;
+                            case 1:
+                                languageId=1;
+                                lang="ru";
+                                editorLang.putString(LANGUAGE_PREFERENCES,lang);
+                                editorLang.apply();
+                                dialog.cancel();
+                                break;
+                            case 2:
+                                languageId=2;
+                                lang="en";
+                                editorLang.putString(LANGUAGE_PREFERENCES,lang);
+                                editorLang.apply();
+                                dialog.cancel();
+                                break;
+                        }
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, null);
+        super.onConfigurationChanged(newConfig);
+    }
+
 
 }
