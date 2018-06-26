@@ -1,6 +1,7 @@
 package com.example.pechn.converter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -8,6 +9,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,7 +33,7 @@ import static com.example.pechn.converter.Settings.THEME_PREFERENCES;
 public class MainActivity extends AppCompatActivity {
 
     Button b1, b2, bp;
-    Boolean point=false, tvc=true;
+    Boolean point=false, lenght=true;
     TextView tv1,tv2;
     double raw1 = 0,raw2=0,raw3=0;
     int t=1,ty=10;
@@ -55,14 +57,23 @@ public class MainActivity extends AppCompatActivity {
     public static final String APP_PREFERENCES = "settings";
     public static final String THEME_PREFERENCES = "theme";
     public static final String LANGUAGE_PREFERENCES = "lang";
-    String lang;
+    String lang, stroka="";
     Locale locale;
     SoundPool soundPool;
+    boolean b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         preferences = getSharedPreferences(APP_PREFERENCES,MODE_PRIVATE);
         langPreferences = getSharedPreferences(APP_PREFERENCES,MODE_PRIVATE);
+        if(preferences.contains("sound")){
+            b = preferences.getBoolean("sound",true);
+        }else {
+            Intent i = getIntent();
+            b = i.getBooleanExtra("sound",true);
+            editor.putBoolean("sound",b);
+            editor.apply();
+        }
         if (langPreferences.contains(LANGUAGE_PREFERENCES)){
             lang = langPreferences.getString("lang", "default");
             if (lang.equals("default")) {
@@ -137,97 +148,104 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onTvClick(View v){
-        switch(v.getId()){
-            case R.id.textView1:
-                raw1=0;
-                point=false;
-                tvc=true;
-                tv1.setTextColor(Color.RED);
-                break;
-            case R.id.textView2:
-                point=false;
-                raw2=0;
-                tvc=false;
-                tv2.setTextColor(Color.RED);
-                break;
-        }
-        if(tvc==true){
-            tv1.setTextColor(Color.RED);
-            tv2.setTextColor(Color.BLACK);
-        }else {
-            tv2.setTextColor(Color.RED);
-            tv1.setTextColor(Color.BLACK);
-        }
-    }
 
     public void onClick(View v){
-        soundPool.play(1,1,1,1,0,1);
+        if(b) {
+            soundPool.play(1, 1, 1, 1, 0, 1);
+        }
         switch (v.getId()){
             case R.id.b0:
-                input(0);
+                input("0");
                 count(id1,id2);
                 break;
             case R.id.b_point:
+                input(",");
                 point=true;
-                input(10);
                 bp.setEnabled(false);
                 break;
             case R.id.b_del:
-                bp.setEnabled(true);
-                ty=10;
-                point=false;
-                if(tvc==true) {
-                    raw1=0;
-                    tv1.setText("0");
-                }else {
-                    raw2=0;
-                    tv2.setText("0");
-                }
-                count(id1,id2);
+                onDelClick();
                 break;
             case R.id.b1:
-                input(1);
+                input("1");
                 count(id1,id2);
                 break;
             case R.id.b2:
-                input(2);
+                input("2");
                 count(id1,id2);
                 break;
             case R.id.b3:
-                input(3);
+                input("3");
                 count(id1,id2);
                 break;
             case R.id.b4:
-                input(4);
+                input("4");
                 count(id1,id2);
                 break;
             case R.id.b5:
-                input(5);
+                input("5");
                 count(id1,id2);
                 break;
             case R.id.b6:
-                input(6);
+                input("6");
                 count(id1,id2);
                 break;
             case R.id.b7:
-                input(7);
+                input("7");
                 count(id1,id2);
                 break;
             case R.id.b8:
-                input(8);
+                input("8");
                 count(id1,id2);
                 break;
             case R.id.b9:
-                input(9);
+                input("9");
                 count(id1,id2);
                 break;
         }
     }
 
-    public void input(double number) {
-        if (tvc == true) {
-            if (number != 10) {
+    public void onLongClick(View v){
+        switch (v.getId()){
+            case R.id.b_del:
+                Toast.makeText(this,"del",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void onDelClick(){
+        lenght=true;
+        bp.setEnabled(true);
+        ty=10;
+        point=false;
+        if(stroka.length()==1) {
+            stroka = "";
+            tv1.setText("0");
+            tv2.setText("0");
+        }else if(stroka==""){
+        }else {
+            stroka = stroka.substring(0, stroka.length() - 1);
+            tv1.setText(stroka);
+            raw1=Double.valueOf(stroka);
+            count(id1, id2);
+        }
+    }
+
+    public void input(String number) {
+        if(lenght) {
+            if (number.equals(",")) {
+                stroka = stroka + number;
+                tv1.setText(stroka);
+            } else {
+                stroka = stroka + number;
+                tv1.setText(stroka);
+                raw1 = Double.valueOf(stroka);
+            }
+        }
+        if(stroka.length()>=16){
+            lenght=false;
+            Alert();
+        }
+            /*if (number != 10) {
                 if (point == false) {
                     if (t != 1) {
                         raw1 *= 10;
@@ -239,25 +257,22 @@ public class MainActivity extends AppCompatActivity {
                     ty *= 10;
                 }
                 t++;
-                tv1.setText(df.format(raw1));
-            } else tv1.setText(df.format(raw1) + ",");
-        } else if (tvc == false) {
-            if (number != 10) {
-                if (point == false) {
-                    if (t != 1) {
-                        raw2 *= 10;
-                        raw2 += number;
-                    } else raw2 += number;
-                } else if (t != 1) {
-                    number /= ty;
-                    raw2 += number;
-                    ty *= 10;
-                }
-                t++;
-                tv2.setText(df.format(raw2));
-            } else
-                tv2.setText(df.format(raw2) + ",");
-        }
+                tv1.setText(String.valueOf(raw1));
+            } else tv1.setText(df.format(raw1) + ",");*/
+    }
+
+    public void Alert(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.
+                setMessage("Вы ввели слишком много символов")
+                .setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        builder.show();
 
     }
 
@@ -271,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void count(int id_1 ,int id_2 ){
         double coeff1=0,coeff2=0,coeff3=0;
-        raw3=0;
+        raw3=0;String raw = null;
         switch (id_1){
             case R.id.menu1:
                 coeff1=COEFFICIENT_NANOMETER;
@@ -348,15 +363,11 @@ public class MainActivity extends AppCompatActivity {
                 coeff2=COEFFICIENT_SEAMILE;
                 break;
         }
-        if(tvc==false){
-            coeff3=coeff2/coeff1;
-            raw3=raw2*coeff3;
-            tv1.setText(df.format(raw3));
-        }else {
             coeff3=coeff1/coeff2;
             raw3=raw1*coeff3;
+            //raw = df.format(raw3);
             tv2.setText(df.format(raw3));
-        }
+
     }
 
     public void showPopupMenu1(View v) {

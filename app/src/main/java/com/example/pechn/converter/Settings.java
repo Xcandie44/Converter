@@ -159,6 +159,7 @@ public class Settings extends AppCompatActivity {
         editor.putBoolean("sound",b);
         editor.apply();
         Intent intent = new Intent(this,MainActivity.class);
+        intent.putExtra("sound",b);
         intent.putExtra("Theme",themeId);
         intent.putExtra("lang",lang);
         finish();
@@ -173,6 +174,7 @@ public class Settings extends AppCompatActivity {
                 .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
                     }
 
                 })
