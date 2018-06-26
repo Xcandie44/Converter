@@ -3,7 +3,7 @@ package com.example.pechn.converter;
 public class SettingsList2 {
     private  String text1;
     private  String text2;
-    public static boolean box;
+    boolean box;
 
     public SettingsList2(String text1, String text2, boolean box){
         this.text1=text1;

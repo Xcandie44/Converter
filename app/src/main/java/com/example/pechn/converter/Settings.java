@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -37,11 +38,11 @@ public class Settings extends AppCompatActivity {
     public static final String THEME_PREFERENCES = "theme";
     public static final String LANGUAGE_PREFERENCES = "lang";
     RadioGroup radioGroup;
+    public static Boolean b = true;
     int savedRadioIndex,themeId=0, languageId=0;
     RadioButton rb;
     private Locale locale;
-    String lang;
-    SoundPool soundPool;
+    String lang;    CheckBox cb1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +72,9 @@ public class Settings extends AppCompatActivity {
                 setTheme(R.style.Dark);
             }
         }
+        if(preferences.contains("sound")){
+            b = preferences.getBoolean("sound",false);
+        }
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
@@ -89,6 +93,7 @@ public class Settings extends AppCompatActivity {
         arrayList2.add(new SettingsList2(arr1[2],arr2[2],true));
         adapter2 = new CustomAdapter2(this,arrayList2);
         lv2.setAdapter(adapter2);
+        cb1 = findViewById(R.id.cb1);
         lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -102,12 +107,9 @@ public class Settings extends AppCompatActivity {
                 }
             }
         });
+
         editor = preferences.edit();
         editorLang = languagePreferences.edit();
-        AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
-        soundPool = new SoundPool(5,AudioManager.STREAM_MUSIC,0);
-        //soundPool.load(this,R.raw.click,0);
-
     }
 
 
@@ -154,6 +156,8 @@ public class Settings extends AppCompatActivity {
 
 
     public void onBackPressed(){
+        editor.putBoolean("sound",b);
+        editor.apply();
         Intent intent = new Intent(this,MainActivity.class);
         intent.putExtra("Theme",themeId);
         intent.putExtra("lang",lang);

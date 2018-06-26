@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String LANGUAGE_PREFERENCES = "lang";
     String lang;
     Locale locale;
+    SoundPool soundPool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
         String r;
         id1=R.id.menu6;
         id2=R.id.menu6;
+        AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
+        soundPool = new SoundPool(5,AudioManager.STREAM_MUSIC,0);
+        soundPool.load(this,R.raw.click,0);
 
     }
 
@@ -156,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View v){
+        soundPool.play(1,1,1,1,0,1);
         switch (v.getId()){
             case R.id.b0:
                 input(0);

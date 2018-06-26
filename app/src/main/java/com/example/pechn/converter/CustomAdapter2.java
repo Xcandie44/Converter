@@ -43,22 +43,22 @@ public class CustomAdapter2 extends ArrayAdapter<SettingsList2> {
 
         TextView text2 =  listItem.findViewById(R.id.tv2);
         text2.setText(currentSetting.getText2());
-
         final CheckBox cb1 = listItem.findViewById(R.id.cb1);
+        if(Settings.b){
+            cb1.setChecked(true);
+        }else cb1.setChecked(false);
         cb1.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(cb1.isChecked()){
-                    currentSetting.setBox(true);
+                    Settings.b = true;
                 }else {
-                    currentSetting.setBox(false);
+                    Settings.b = false;
+
                 }
             }
         });
-        cb1.setTag(position);
-        cb1.setChecked(currentSetting.isBox());
-
-
+        //cb1.setTag(position);
 
         return listItem;
     }
