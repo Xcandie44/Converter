@@ -2,11 +2,47 @@
     <string name="app_name">Converter</string>
     <string name="settings">Настройки</string>
     <string name="general">Общие</string>
-    <string name="sounds">Звуки</string>
+    <string name="sounds">Отмена</string>
+    <string name="enter">Введите число</string>
+    <string name="meters">Метры</string>
+    <string name="kilometers">Километры</string>
+    <string name="centimeters">Сантиметры</string>
+    <string name="millimeters">Миллиметры</string>
+    <string name="micrometers">Микрометры</string>
+    <string name="nanometers">Нанометры</string>
+    <string name="decimeters">Дециметры</string>
+    <string name="inches">Дюймы</string>
+    <string name="foots">Футы</string>
+    <string name="yards">Ярды</string>
+    <string name="miles">Мили</string>
+    <string name="seamiles">Морские мили</string>
 
-    <string-array name="menu1">
+
+
+    <string-array name="menu">
         <item>Тема</item>
         <item>Язык</item>
         <item>Звук</item>
+    </string-array>
+
+    <string name="themeTitle">Выберите тему</string>
+
+    <string-array name="theme">
+        <item>Светлая</item>
+        <item>Темная</item>
+        <item>Зеленая</item>
+    </string-array>
+
+    <string-array name="language">
+        <item>По умолчанию</item>
+        <item>Русский</item>
+        <item>English</item>
+    </string-array>
+
+    <string name="languageTitle">Выберите язык\</string>
+    <string-array name="menu2">
+        <item>Тема приложения</item>
+        <item>Необходимо полностью перезапустить\nприложение для принятия изменений</item>
+        <item>Звук нажатия на клавиатуру</item>
     </string-array>
 </resources>

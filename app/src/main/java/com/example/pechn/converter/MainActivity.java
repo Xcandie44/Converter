@@ -12,11 +12,14 @@ import android.media.SoundPool;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,12 +34,12 @@ import static com.example.pechn.converter.Settings.APP_PREFERENCES;
 import static com.example.pechn.converter.Settings.THEME_PREFERENCES;
 
 public class MainActivity extends AppCompatActivity {
-
-    Button b1, b2, bp;
+    LinearLayout l1;
+    Button b1_menu, b2_menu, bp,b_del,b0,b1,b2,b3,b4,b5,b6,b7,b8,b9;
     Boolean point=false, lenght=true;
     TextView tv1,tv2;
     double raw1 = 0,raw2=0,raw3=0;
-    int t=1,ty=10;
+    int t=1,ty=10,color,color_gray,color_keyboard,text_color;
     EditText et1;
     final static double COEFFICIENT_METER = 1;
     final static double COEFFICIENT_KILOMETER = 1000;
@@ -61,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     Locale locale;
     SoundPool soundPool;
     boolean b;
+    TouchListener tl;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,12 +101,16 @@ public class MainActivity extends AppCompatActivity {
                 setTheme(R.style.Light);
             }else if(themeId==1){
                 setTheme(R.style.Dark);
+            }else if(themeId==2) {
+                setTheme(R.style.Green);
             }
         }else {
             Intent i = getIntent();
             themeId = i.getIntExtra("Theme", 0);
             if (themeId == 1) {
                 setTheme(R.style.Dark);
+            }else if (themeId == 2) {
+                setTheme(R.style.Green);
             }
             editor.putInt(THEME_PREFERENCES,themeId);
             editor.apply();
@@ -109,16 +118,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
-        b1 = findViewById(R.id.button);
-        b2 = findViewById(R.id.button2);
+        l1 = findViewById(R.id.linear1);
+        b0 = findViewById(R.id.b0);
+        b1 = findViewById(R.id.b1);
+        b2 = findViewById(R.id.b2);
+        b3 = findViewById(R.id.b3);
+        b4 = findViewById(R.id.b4);
+        b5 = findViewById(R.id.b5);
+        b6 = findViewById(R.id.b6);
+        b7 = findViewById(R.id.b7);
+        b8 = findViewById(R.id.b8);
+        b9 = findViewById(R.id.b9);
+        b_del = findViewById(R.id.b_del);
+        b1_menu = findViewById(R.id.button1);
+        b2_menu = findViewById(R.id.button2);
         tv1 = findViewById(R.id.textView1);
         tv2 = findViewById(R.id.textView2);
         bp = findViewById(R.id.b_point);
         df = new DecimalFormat("#.############");
         df.setRoundingMode(RoundingMode.CEILING);
-        tv1.setTextColor(Color.RED);
-        tv2.setTextColor(Color.BLACK);
-        tv1.setText("0");
+        tv1.setText(R.string.enter);
         tv2.setText("0");
         String r;
         id1=R.id.menu6;
@@ -126,7 +145,54 @@ public class MainActivity extends AppCompatActivity {
         AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
         soundPool = new SoundPool(5,AudioManager.STREAM_MUSIC,0);
         soundPool.load(this,R.raw.click,0);
+        b_del.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                stroka="";
+                raw1=0;
+                tv1.setText(R.string.enter);
+                tv2.setText("0");
+                return false;
+            }
+        });
+        TouchListener tl = new TouchListener();
+        b1_menu.setOnTouchListener(tl);
+        b2_menu.setOnTouchListener(tl);
+        bp.setOnTouchListener(tl);
+        b_del.setOnTouchListener(tl);
+        b0.setOnTouchListener(tl);
+        b1.setOnTouchListener(tl);
+        b2.setOnTouchListener(tl);
+        b3.setOnTouchListener(tl);
+        b4.setOnTouchListener(tl);
+        b5.setOnTouchListener(tl);
+        b6.setOnTouchListener(tl);
+        b7.setOnTouchListener(tl);
+        b8.setOnTouchListener(tl);
+        b9.setOnTouchListener(tl);
+        if(themeId==0){
+            text_color = getResources().getColor(R.color.dark);
+            color_keyboard=getResources().getColor(R.color.Dark_white);
+            color =getResources().getColor(R.color.blue);
+            color_gray=getResources().getColor(R.color.gray);
+            l1.setBackgroundColor(getResources().getColor(R.color.white));
+            setButtonColor(color_keyboard,text_color,color);
+        }else if(themeId==1){
+            text_color = getResources().getColor(R.color.white);
+            color_keyboard=getResources().getColor(R.color.dark);
+            color =getResources().getColor(R.color.orange);
+            color_gray=getResources().getColor(R.color.gray);
+            l1.setBackgroundColor(getResources().getColor(R.color.black));
+            setButtonColor(color_keyboard,text_color,color);
 
+        }else if(themeId==2){
+            text_color = getResources().getColor(R.color.dark);
+            color_keyboard=getResources().getColor(R.color.Dark_white);
+            color =getResources().getColor(R.color.green);
+            color_gray=getResources().getColor(R.color.gray);
+            l1.setBackgroundColor(getResources().getColor(R.color.white));
+            setButtonColor(color_keyboard,text_color,color);
+        }
     }
 
 
@@ -150,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClick(View v){
-        if(b) {
+        if(b && v.getId() != R.id.b_del) {
             soundPool.play(1, 1, 1, 1, 0, 1);
         }
         switch (v.getId()){
@@ -159,11 +225,13 @@ public class MainActivity extends AppCompatActivity {
                 count(id1,id2);
                 break;
             case R.id.b_point:
-                input(",");
+                input(".");
                 point=true;
                 bp.setEnabled(false);
                 break;
             case R.id.b_del:
+               // b_del.setBackgroundColor(getResources().getColor(R.color.gray));
+               // b_del.setBackgroundColor(getResources().getColor(R.color.blue));
                 onDelClick();
                 break;
             case R.id.b1:
@@ -205,13 +273,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onLongClick(View v){
-        switch (v.getId()){
-            case R.id.b_del:
-                Toast.makeText(this,"del",Toast.LENGTH_SHORT).show();
-        }
-    }
-
     public void onDelClick(){
         lenght=true;
         bp.setEnabled(true);
@@ -219,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
         point=false;
         if(stroka.length()==1) {
             stroka = "";
-            tv1.setText("0");
+            tv1.setText("Введите число");
             tv2.setText("0");
         }else if(stroka==""){
         }else {
@@ -232,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void input(String number) {
         if(lenght) {
-            if (number.equals(",")) {
+            if (number.equals(".")) {
                 stroka = stroka + number;
                 tv1.setText(stroka);
             } else {
@@ -245,20 +306,6 @@ public class MainActivity extends AppCompatActivity {
             lenght=false;
             Alert();
         }
-            /*if (number != 10) {
-                if (point == false) {
-                    if (t != 1) {
-                        raw1 *= 10;
-                        raw1 += number;
-                    } else raw1 += number;
-                } else if (t != 1) {
-                    number /= ty;
-                    raw1 += number;
-                    ty *= 10;
-                }
-                t++;
-                tv1.setText(String.valueOf(raw1));
-            } else tv1.setText(df.format(raw1) + ",");*/
     }
 
     public void Alert(){
@@ -286,6 +333,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void count(int id_1 ,int id_2 ){
         double coeff1=0,coeff2=0,coeff3=0;
+        int c;
         raw3=0;String raw = null;
         switch (id_1){
             case R.id.menu1:
@@ -365,8 +413,8 @@ public class MainActivity extends AppCompatActivity {
         }
             coeff3=coeff1/coeff2;
             raw3=raw1*coeff3;
-            //raw = df.format(raw3);
-            tv2.setText(df.format(raw3));
+            raw = df.format(raw3);
+            tv2.setText(raw);
 
     }
 
@@ -381,47 +429,42 @@ public class MainActivity extends AppCompatActivity {
 
                         switch (item1.getItemId()) {
                             case R.id.menu1:
-                                b1.setText("Нанометры");
+                                b1_menu.setText(R.string.nanometers);
                                 df = new DecimalFormat("#.############");
                                 df.setRoundingMode(RoundingMode.CEILING);
                                 id1 = item1.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu2:
-                                //raw2=0;
-                                b1.setText("Микрометры");
+                                b1_menu.setText(R.string.micrometers);
                                 df = new DecimalFormat("#.############");
                                 df.setRoundingMode(RoundingMode.CEILING);
                                 id1 = item1.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu3:
-                                //raw2=0;
-                                b1.setText("Миллиметры");
+                                b1_menu.setText(R.string.millimeters);
                                 df = new DecimalFormat("#.############");
                                 df.setRoundingMode(RoundingMode.CEILING);
                                 id1 = item1.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu4:
-                                //raw2=0;
-                                b1.setText("Сантиметры");
+                                b1_menu.setText(R.string.centimeters);
                                 df = new DecimalFormat("#.############");
                                 df.setRoundingMode(RoundingMode.CEILING);
                                 id1 = item1.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu5:
-                                raw2=0;
-                                b1.setText("Дециметры");
+                                b1_menu.setText(R.string.decimeters);
                                 df = new DecimalFormat("#.############");
                                 df.setRoundingMode(RoundingMode.CEILING);
                                 id1 = item1.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu6:
-                                //raw2=0;
-                                b1.setText("Метры");
+                                b1_menu.setText(R.string.meters);
                                 df = new DecimalFormat("#.############");
                                 df.setRoundingMode(RoundingMode.CEILING);
                                 id1 = item1.getItemId();
@@ -429,49 +472,36 @@ public class MainActivity extends AppCompatActivity {
                                 return true;
                             case R.id.menu7:
                                 raw2=0;
-                                b1.setText("Километры");
+                                b1_menu.setText(R.string.kilometers);
                                 df = new DecimalFormat("#.############");
                                 df.setRoundingMode(RoundingMode.CEILING);
                                 id1 = item1.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu8:
-                                //raw2=0;
-                                b1.setText("Дюймы");
-                              //  df = new DecimalFormat("#.######");
-                                //df.setRoundingMode(RoundingMode.CEILING);
+                                b1_menu.setText(R.string.inches);
                                 id1 = item1.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu9:
-                                //raw2=0;
-                                b1.setText("Футы");
+                                b1_menu.setText(R.string.foots);
                                 df = new DecimalFormat("#.######");
                                 df.setRoundingMode(RoundingMode.CEILING);
                                 id1 = item1.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu10:
-                               // raw2=0;
-                                b1.setText("Ярды");
-                               // df = new DecimalFormat("#.######");
-                             //   df.setRoundingMode(RoundingMode.CEILING);
+                                b1_menu.setText(R.string.yards);
                                 id1 = item1.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu11:
-                                //raw2=0;
-                                b1.setText("Мили");
-                                //df = new DecimalFormat("#.##################");
-                               // df.setRoundingMode(RoundingMode.CEILING);
+                                b1_menu.setText(R.string.miles);
                                 id1 = item1.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu12:
-                                //raw2=0;
-                                b1.setText("Морские мили");
-                                //df = new DecimalFormat("#.###############");
-                               // df.setRoundingMode(RoundingMode.CEILING);
+                                b1_menu.setText(R.string.seamiles);
                                 id1 = item1.getItemId();
                                 count(id1,id2);
                                 return true;
@@ -495,98 +525,76 @@ public class MainActivity extends AppCompatActivity {
 
                         switch (item2.getItemId()) {
                             case R.id.menu1:
-                               // raw2=0;
-                                b2.setText("Нанометры");
+                                b2_menu.setText(R.string.nanometers);
                                 df = new DecimalFormat("#.############");
                                 df.setRoundingMode(RoundingMode.CEILING);
                                 id2 = item2.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu2:
-                                //raw2=0;
-                                b2.setText("Микрометры");
+                                b2_menu.setText(R.string.micrometers);
                                 df = new DecimalFormat("#.############");
                                 df.setRoundingMode(RoundingMode.CEILING);
                                 id2 = item2.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu3:
-                                //raw2=0;
-                                b2.setText("Миллиметры");
+                                b2_menu.setText(R.string.millimeters);
                                 df = new DecimalFormat("#.############");
                                 df.setRoundingMode(RoundingMode.CEILING);
                                 id2 = item2.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu4:
-                                //raw2=0;
-                                b2.setText("Сантиметры");
+                                b2_menu.setText(R.string.centimeters);
                                 df = new DecimalFormat("#.############");
                                 df.setRoundingMode(RoundingMode.CEILING);
                                 id2 = item2.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu5:
-                                //raw2=0;
-                                b2.setText("Дециметры");
+                                b2_menu.setText(R.string.decimeters);
                                 df = new DecimalFormat("#.############");
                                 df.setRoundingMode(RoundingMode.CEILING);
                                 id2 = item2.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu6:
-                                //raw2=0;
-                                b2.setText("Метры");
+                                b2_menu.setText(R.string.meters);
                                 df = new DecimalFormat("#.############");
                                 df.setRoundingMode(RoundingMode.CEILING);
                                 id2 = item2.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu7:
-                                //raw2=0;
-                                b2.setText("Километры");
+                                b2_menu.setText(R.string.kilometers);
                                 df = new DecimalFormat("#.############");
                                 df.setRoundingMode(RoundingMode.CEILING);
                                 id2 = item2.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu8:
-                                //raw2=0;
-                                b2.setText("Дюймы");
-                               // df = new DecimalFormat("#.######");
-                               // df.setRoundingMode(RoundingMode.CEILING);
+                                b2_menu.setText(R.string.inches);
                                 id2 = item2.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu9:
-                                //raw2=0;
-                                b2.setText("Футы");
-                               // df = new DecimalFormat("#.######");
-                               // df.setRoundingMode(RoundingMode.CEILING);
+                                b2_menu.setText(R.string.foots);
                                 id2 = item2.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu10:
-                                //raw2=0;
-                                b2.setText("Ярды");
-                               // df = new DecimalFormat("#.######");
-                                //df.setRoundingMode(RoundingMode.CEILING);
+                                b2_menu.setText(R.string.yards);
                                 id2 = item2.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu11:
-                                //raw2=0;
-                                b2.setText("Мили");
-                               // df = new DecimalFormat("#.######");
-                                //df.setRoundingMode(RoundingMode.CEILING);
+                                b2_menu.setText(R.string.miles);
                                 id2 = item2.getItemId();
                                 count(id1,id2);
                                 return true;
                             case R.id.menu12:
-                                //raw2=0;
-                                b2.setText("Морские мили");
-                               // df = new DecimalFormat("#.######");
-                               // df.setRoundingMode(RoundingMode.CEILING);
+                                b2_menu.setText(R.string.seamiles);
                                 id2 = item2.getItemId();
                                 count(id1,id2);
                             default:
@@ -597,7 +605,7 @@ public class MainActivity extends AppCompatActivity {
         popupMenu.show();
     }
 
-    @Override
+   /*@Override
     public void onConfigurationChanged(Configuration newConfig) {
         locale = new Locale(lang);
         Locale.setDefault(locale);
@@ -605,6 +613,158 @@ public class MainActivity extends AppCompatActivity {
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config, null);
         super.onConfigurationChanged(newConfig);
+    }*/
+
+
+    class TouchListener implements View.OnTouchListener {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    switch (v.getId()){
+                        case R.id.button1:
+                            b1_menu.setBackgroundColor(color_gray);
+                            break;
+                        case R.id.button2:
+                            b2_menu.setBackgroundColor(color_gray);
+                            break;
+                        case R.id.b0:
+                            b0.setBackgroundColor(color_gray);
+                            break;
+                        case R.id.b_point:
+                            bp.setBackgroundColor(color_gray);
+                            break;
+                        case R.id.b_del:
+                            b_del.setBackgroundColor(color_gray);
+                            if(b) {
+                                soundPool.play(1, 1, 1, 1, 0, 1);
+                                break;
+                            }
+                            break;
+                        case R.id.b1:
+                            b1.setBackgroundColor(color_gray);
+                            break;
+                        case R.id.b2:
+                            b2.setBackgroundColor(color_gray);
+                            break;
+                        case R.id.b3:
+                            b3.setBackgroundColor(color_gray);
+                            break;
+                        case R.id.b4:
+                            b4.setBackgroundColor(color_gray);
+                            break;
+                        case R.id.b5:
+                            b5.setBackgroundColor(color_gray);
+                            break;
+                        case R.id.b6:
+                            b6.setBackgroundColor(color_gray);
+                            break;
+                        case R.id.b7:
+                            b7.setBackgroundColor(color_gray);
+                            break;
+                        case R.id.b8:
+                            b8.setBackgroundColor(color_gray);
+                            break;
+                        case R.id.b9:
+                            b9.setBackgroundColor(color_gray);
+                            break;
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    switch (v.getId()){
+                        case R.id.button1:
+                            if(themeId==1) {
+                                b1_menu.setBackgroundColor(color_keyboard);
+                            }else{
+                                b1_menu.setBackgroundColor(color);
+                            }
+                            break;
+                        case R.id.button2:
+                            if(themeId==1) {
+                                b2_menu.setBackgroundColor(color_keyboard);
+                            }else{
+                                b2_menu.setBackgroundColor(color);
+                            }
+                            break;
+                        case R.id.b0:
+                            b0.setBackgroundColor(color_keyboard);
+                            break;
+                        case R.id.b_point:
+                            bp.setBackgroundColor(color);
+                            break;
+                        case R.id.b_del:
+                            b_del.setBackgroundColor(color);
+                            break;
+                        case R.id.b1:
+                            b1.setBackgroundColor(color_keyboard);
+                            break;
+                        case R.id.b2:
+                            b2.setBackgroundColor(color_keyboard);
+                            break;
+                        case R.id.b3:
+                            b3.setBackgroundColor(color_keyboard);
+                            break;
+                        case R.id.b4:
+                            b4.setBackgroundColor(color_keyboard);
+                            break;
+                        case R.id.b5:
+                            b5.setBackgroundColor(color_keyboard);
+                            break;
+                        case R.id.b6:
+                            b6.setBackgroundColor(color_keyboard);
+                            break;
+                        case R.id.b7:
+                            b7.setBackgroundColor(color_keyboard);
+                            break;
+                        case R.id.b8:
+                            b8.setBackgroundColor(color_keyboard);
+                            break;
+                        case R.id.b9:
+                            b9.setBackgroundColor(color_keyboard);
+                            break;
+                    }
+                    break;
+            }
+            return false;
+        }
+    }
+    public void setButtonColor(int color_keyboard,int textColor, int color){
+        if(themeId==1) {
+            b1_menu.setBackgroundColor(color_keyboard);
+            b2_menu.setBackgroundColor(color_keyboard);
+        }else{
+            b1_menu.setBackgroundColor(color);
+            b2_menu.setBackgroundColor(color);
+        }
+        b1_menu.setTextColor(textColor);
+        b2_menu.setTextColor(textColor);
+        tv1.setTextColor(textColor);
+        tv2.setTextColor(textColor);
+        b_del.setBackgroundColor(color);
+        b_del.setTextColor(textColor);
+        bp.setBackgroundColor(color);
+        bp.setTextColor(textColor);
+        b0.setBackgroundColor(color_keyboard);
+        b0.setTextColor(textColor);
+        b1.setBackgroundColor(color_keyboard);
+        b1.setTextColor(textColor);
+        b2.setBackgroundColor(color_keyboard);
+        b2.setTextColor(textColor);
+        b3.setBackgroundColor(color_keyboard);
+        b3.setTextColor(textColor);
+        b4.setBackgroundColor(color_keyboard);
+        b4.setTextColor(textColor);
+        b5.setBackgroundColor(color_keyboard);
+        b5.setTextColor(textColor);
+        b6.setBackgroundColor(color_keyboard);
+        b6.setTextColor(textColor);
+        b7.setBackgroundColor(color_keyboard);
+        b7.setTextColor(textColor);
+        b8.setBackgroundColor(color_keyboard);
+        b8.setTextColor(textColor);
+        b9.setBackgroundColor(color_keyboard);
+        b9.setTextColor(textColor);
     }
 
 }

@@ -3,11 +3,46 @@
     <string name="settings">Settings</string>
     <string name="general">General</string>
     <string name="sounds">Sounds</string>
+    <string name="cancel">cancel</string>
+    <string name="enter">Enter the number</string>
+    <string name="meters">Meter</string>
+    <string name="kilometers">Kilometer</string>
+    <string name="centimeters">Centimeter</string>
+    <string name="millimeters">Millimeter</string>
+    <string name="micrometers">Micrometer</string>
+    <string name="nanometers">Nanometer</string>
+    <string name="decimeters">Decimeter</string>
+    <string name="inches">Inch</string>
+    <string name="foots">Foot</string>
+    <string name="yards">Yard</string>
+    <string name="miles">Mile</string>
+    <string name="seamiles">Sea mile</string>
 
-    <string-array name="menu1">
+    <string-array name="menu">
         <item>Theme</item>
         <item>Language</item>
         <item>Sounds</item>
     </string-array>
 
+    <string name="themeTitle">Choose theme\</string>
+
+    <string-array name="theme">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Green</item>
+    </string-array>
+
+    <string name="languageTitle">Choose language\</string>
+
+    <string-array name="language">
+    <item>Default</item>
+    <item>Русский</item>
+    <item>English</item>
+    </string-array>
+
+    <string-array name="menu2">
+        <item>Application theme</item>
+        <item>Need to restart application\nto accept changes</item>
+        <item>Sound of pressing the keyboard</item>
+    </string-array>
 </resources>

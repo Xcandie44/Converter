@@ -21,14 +21,16 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class Settings extends AppCompatActivity {
+    TextView tv1,tv2;
     String[] arr1 ;
-    final String[] arr2 = new String[]{"Тема приложения","Необходимо полностью перезапустить\nприложение для принятия изменений","Звук нажатия на клавиатуру"};
+    String[] arr2;
     ListView lv1,lv2;
     private CustomAdapter1 adapter1;
     private CustomAdapter2 adapter2;
@@ -39,7 +41,7 @@ public class Settings extends AppCompatActivity {
     public static final String LANGUAGE_PREFERENCES = "lang";
     RadioGroup radioGroup;
     public static Boolean b = true;
-    int savedRadioIndex,themeId=0, languageId=0;
+    int savedRadioIndex,themeId=0, languageId=0, color;
     RadioButton rb;
     private Locale locale;
     String lang;    CheckBox cb1;
@@ -70,6 +72,8 @@ public class Settings extends AppCompatActivity {
                 setTheme(R.style.Light);
             }else if(themeId==1){
                 setTheme(R.style.Dark);
+            }else if(themeId==2){
+                setTheme(R.style.Green);
             }
         }
         if(preferences.contains("sound")){
@@ -78,11 +82,13 @@ public class Settings extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        arr2= getResources().getStringArray(R.array.menu2);
+        tv1 = findViewById(R.id.textView1);
+        tv2 = findViewById(R.id.textView2);
         lv1 = findViewById(R.id.first_list);
         lv2 = findViewById(R.id.second_list);
         getSupportActionBar().hide();
-        arr1 = getResources().getStringArray(R.array.menu1);
-        radioGroup = findViewById(R.id.radiogroup);
+        arr1 = getResources().getStringArray(R.array.menu);
         rb = findViewById(R.id.dark);
         ArrayList<SettingsList1> arrayList1 = new ArrayList<>();
         arrayList1.add(new SettingsList1(arr1[0],arr2[0]));
@@ -110,15 +116,24 @@ public class Settings extends AppCompatActivity {
 
         editor = preferences.edit();
         editorLang = languagePreferences.edit();
+        if(themeId==0) {
+            color = getResources().getColor(R.color.blue);
+            tv1.setTextColor(color);
+            tv2.setTextColor(color);
+        }else if(themeId==1){
+            color = getResources().getColor(R.color.dark);
+            tv1.setTextColor(color);
+            tv2.setTextColor(color);
+            }
     }
 
 
     public void onThemeClick(){
-        final String[] themeArray = {"Светлая","Темная"};
+        final String[] themeArray = getResources().getStringArray(R.array.theme);
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.layout_theme,null);
-        builder.setTitle("Выберите тему");
+        builder.setTitle(R.string.themeTitle);
        // builder.setView(view);
         builder
                 .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
@@ -138,6 +153,11 @@ public class Settings extends AppCompatActivity {
                         break;
                     case 1:
                         editor.putInt(THEME_PREFERENCES,1);
+                        editor.apply();
+                        intent();
+                        break;
+                    case 2:
+                        editor.putInt(THEME_PREFERENCES,2);
                         editor.apply();
                         intent();
                         break;
@@ -167,9 +187,9 @@ public class Settings extends AppCompatActivity {
     }
 
     public void onLanguageClick(){
-        final String[] themeArray = {"По умолчанию", "Русский","Английский"};
+        final String[] themeArray = getResources().getStringArray(R.array.language);
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Выберите язык");
+        builder.setTitle(R.string.languageTitle);
         builder
                 .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
                     @Override
@@ -188,6 +208,7 @@ public class Settings extends AppCompatActivity {
                                 editorLang.putString(LANGUAGE_PREFERENCES,lang);
                                 editorLang.apply();
                                 dialog.cancel();
+                                intent();
                                 break;
                             case 1:
                                 languageId=1;
@@ -195,6 +216,7 @@ public class Settings extends AppCompatActivity {
                                 editorLang.putString(LANGUAGE_PREFERENCES,lang);
                                 editorLang.apply();
                                 dialog.cancel();
+                                intent();
                                 break;
                             case 2:
                                 languageId=2;
@@ -202,6 +224,7 @@ public class Settings extends AppCompatActivity {
                                 editorLang.putString(LANGUAGE_PREFERENCES,lang);
                                 editorLang.apply();
                                 dialog.cancel();
+                                intent();
                                 break;
                         }
                     }
