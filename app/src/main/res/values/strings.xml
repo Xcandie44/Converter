@@ -17,6 +17,13 @@
     <string name="yards">Yard</string>
     <string name="miles">Mile</string>
     <string name="seamiles">Sea mile</string>
+    <string name="alert">You have entered too many symbols</string>
+    <string name="lenght">Lenght</string>
+    <string name="amount">Amount</string>
+    <string name="milliliter">Milliliter</string>
+    <string name="cubicCentimeter">Cubic centimeter</string>
+    <string name="liter">Liter</string>
+    <string name="cubicMeter">Cubic meter</string>
 
     <string-array name="menu">
         <item>Theme</item>

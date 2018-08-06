@@ -9,6 +9,14 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <Button
+        android:textSize="17sp"
+        android:id="@+id/button3"
+        android:onClick="onClick3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/lenght"/>
+
     <TextView
         android:id="@+id/textView1"
         android:layout_marginStart="10dp"

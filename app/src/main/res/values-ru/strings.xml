@@ -2,7 +2,8 @@
     <string name="app_name">Lenght Converter</string>
     <string name="settings">Настройки</string>
     <string name="general">Общие</string>
-    <string name="sounds">Отмена</string>
+    <string name="sounds">Звук</string>
+    <string name="cancel">отмена</string>
     <string name="enter">Введите число</string>
     <string name="meters">Метры</string>
     <string name="kilometers">Километры</string>
@@ -16,6 +17,13 @@
     <string name="yards">Ярды</string>
     <string name="miles">Мили</string>
     <string name="seamiles">Морские мили</string>
+    <string name="alert">Вы ввели слишком много символов</string>
+    <string name="lenght">Длина</string>
+    <string name="amount">Объем</string>
+    <string name="milliliter">Миллилитры</string>
+    <string name="cubicCentimeter">Кубические сантиметры</string>
+    <string name="liter">Литры</string>
+    <string name="cubicMeter">Кубические метры</string>
 
 
 

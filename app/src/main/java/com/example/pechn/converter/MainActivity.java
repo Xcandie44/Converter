@@ -35,7 +35,7 @@ import static com.example.pechn.converter.Settings.THEME_PREFERENCES;
 
 public class MainActivity extends AppCompatActivity {
     LinearLayout l1;
-    Button b1_menu, b2_menu, bp,b_del,b0,b1,b2,b3,b4,b5,b6,b7,b8,b9;
+    Button b1_menu, b2_menu,b3_menu, bp,b_del,b0,b1,b2,b3,b4,b5,b6,b7,b8,b9;
     Boolean point=false, lenght=true;
     TextView tv1,tv2;
     double raw1 = 0,raw2=0,raw3=0;
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     final static double COEFFICIENT_YARD = 0.9144;
     final static double COEFFICIENT_MILE = 1609.344;
     final static double COEFFICIENT_SEAMILE = 1852;
-    int id1,id2,themeId=0;
+    int id1,id2,id3=R.id.lenght,themeId=0;
     DecimalFormat df;
     SharedPreferences preferences, langPreferences;
     SharedPreferences.Editor editor ,editorLang;
@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
+       // getSupportActionBar().hide();
         l1 = findViewById(R.id.linear1);
         b0 = findViewById(R.id.b0);
         b1 = findViewById(R.id.b1);
@@ -132,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         b_del = findViewById(R.id.b_del);
         b1_menu = findViewById(R.id.button1);
         b2_menu = findViewById(R.id.button2);
+        b3_menu = findViewById(R.id.button3);
         tv1 = findViewById(R.id.textView1);
         tv2 = findViewById(R.id.textView2);
         bp = findViewById(R.id.b_point);
@@ -158,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
         TouchListener tl = new TouchListener();
         b1_menu.setOnTouchListener(tl);
         b2_menu.setOnTouchListener(tl);
+        b3_menu.setOnTouchListener(tl);
         bp.setOnTouchListener(tl);
         b_del.setOnTouchListener(tl);
         b0.setOnTouchListener(tl);
@@ -216,9 +219,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClick(View v){
-        if(b && v.getId() != R.id.b_del) {
-            soundPool.play(1, 1, 1, 1, 0, 1);
-        }
         switch (v.getId()){
             case R.id.b0:
                 input("0");
@@ -230,8 +230,6 @@ public class MainActivity extends AppCompatActivity {
                 bp.setEnabled(false);
                 break;
             case R.id.b_del:
-               // b_del.setBackgroundColor(getResources().getColor(R.color.gray));
-               // b_del.setBackgroundColor(getResources().getColor(R.color.blue));
                 onDelClick();
                 break;
             case R.id.b1:
@@ -293,7 +291,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void input(String number) {
         if(lenght) {
-            if (number.equals(".")) {
+            if(number.equals(".")&&stroka.length()==0){
+                stroka = "0.";
+                tv1.setText(stroka);
+            }else if(bp.isEnabled()==true && stroka.length()==1 && stroka.equals("0")&& !number.equals(".")){
+                stroka = "0." + number;
+                tv1.setText(stroka);
+                bp.setEnabled(false);
+                raw1= Double.valueOf(stroka);
+            }else if (number.equals(".")) {
                 stroka = stroka + number;
                 tv1.setText(stroka);
             } else {
@@ -312,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.
-                setMessage("Вы ввели слишком много символов")
+                setMessage(R.string.alert)
                 .setNeutralButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -331,84 +337,112 @@ public class MainActivity extends AppCompatActivity {
         showPopupMenu2(v);
     }
 
+    public void onClick3(View v){
+        showPopupMenu3(v);
+    }
+
     public void count(int id_1 ,int id_2 ){
         double coeff1=0,coeff2=0,coeff3=0;
         int c;
         raw3=0;String raw = null;
         switch (id_1){
             case R.id.menu1:
-                coeff1=COEFFICIENT_NANOMETER;
+                coeff1=0.000000001;
                 break;
             case R.id.menu2:
-                coeff1=COEFFICIENT_MICROMETER;
+                coeff1=0.000001;
                 break;
             case R.id.menu3:
-                coeff1=COEFFICIENT_MILLIMETER;
+                coeff1=0.001;
                 break;
             case R.id.menu4:
-                coeff1=COEFFICIENT_CENTIMETER;
+                coeff1=0.01;
                 break;
             case R.id.menu5:
-                coeff1=COEFFICIENT_DECIMETER;
+                coeff1=0.1;
                 break;
             case R.id.menu6:
-                coeff1=COEFFICIENT_METER;
+                coeff1=1;
                 break;
             case R.id.menu7:
-                coeff1=COEFFICIENT_KILOMETER;
+                coeff1=1000;
                 break;
             case R.id.menu8:
-                coeff1=COEFFICIENT_INCH;
+                coeff1=0.0254;
                 break;
             case R.id.menu9:
-                coeff1=COEFFICIENT_FOOT;
+                coeff1=0.3048;
                 break;
             case R.id.menu10:
-                coeff1=COEFFICIENT_YARD;
+                coeff1=0.9144;
                 break;
             case R.id.menu11:
-                coeff1=COEFFICIENT_MILE;
+                coeff1=1609.344;
                 break;
             case R.id.menu12:
-                coeff1=COEFFICIENT_SEAMILE;
+                coeff1=1852;
+                break;
+            case R.id.milliliter:
+                coeff1 = 1;
+                break;
+            case R.id.cc:
+                coeff1 = 1;
+                break;
+            case R.id.liter:
+                coeff1 = 1000;
+                break;
+            case R.id.cbm:
+                coeff1 = 1000000;
                 break;
         }
         switch (id_2){
             case R.id.menu1:
-                coeff2=COEFFICIENT_NANOMETER;
+                coeff2=0.000000001;
                 break;
             case R.id.menu2:
-                coeff2=COEFFICIENT_MICROMETER;
+                coeff2=0.000001;
                 break;
             case R.id.menu3:
-                coeff2=COEFFICIENT_MILLIMETER;
+                coeff2=0.001;
                 break;
             case R.id.menu4:
-                coeff2=COEFFICIENT_CENTIMETER;
+                coeff2=0.01;
                 break;
             case R.id.menu5:
-                coeff2=COEFFICIENT_DECIMETER;
+                coeff2=0.1;
                 break;
             case R.id.menu6:
-                coeff2=COEFFICIENT_METER;
+                coeff2=1;
                 break;
             case R.id.menu7:
-                coeff2=COEFFICIENT_KILOMETER;
+                coeff2=1000;
                 break;
             case R.id.menu8:
-                coeff2=COEFFICIENT_INCH;
+                coeff2=0.0254;
                 break;
             case R.id.menu9:
-                coeff2=COEFFICIENT_FOOT;
+                coeff2=0.3048;
                 break;
             case R.id.menu10:
-                coeff2=COEFFICIENT_YARD;
+                coeff2=0.9144;
                 break;
             case R.id.menu11:
-                coeff2=COEFFICIENT_MILE;
+                coeff2=1609.344;
                 break;
             case R.id.menu12:
-                coeff2=COEFFICIENT_SEAMILE;
+                coeff2=1852;
+                break;
+            case R.id.milliliter:
+                coeff2 = 1;
+                break;
+            case R.id.cc:
+                coeff2 = 1;
+                break;
+            case R.id.liter:
+                coeff2 = 1000;
+                break;
+            case R.id.cbm:
+                coeff2 = 1000000;
                 break;
         }
             coeff3=coeff1/coeff2;
@@ -420,7 +454,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void showPopupMenu1(View v) {
         PopupMenu popupMenu = new PopupMenu(this, v);
-        popupMenu.inflate(R.menu.first_menu);
+        switch (id3){
+            case R.id.lenght:
+                popupMenu.inflate(R.menu.first_menu);
+                break;
+            case R.id.amount:
+                popupMenu.inflate(R.menu.second_menu);
+                break;
+        }
         popupMenu
                 .setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
@@ -505,6 +546,26 @@ public class MainActivity extends AppCompatActivity {
                                 id1 = item1.getItemId();
                                 count(id1,id2);
                                 return true;
+                            case R.id.milliliter:
+                                b1_menu.setText(R.string.milliliter);
+                                id1 = item1.getItemId();
+                                count(id1,id2);
+                                return true;
+                            case R.id.cc:
+                                b1_menu.setText(R.string.cubicCentimeter);
+                                id1 = item1.getItemId();
+                                count(id1,id2);
+                                return true;
+                            case R.id.liter:
+                                b1_menu.setText(R.string.liter);
+                                id1 = item1.getItemId();
+                                count(id1,id2);
+                                return true;
+                            case R.id.cbm:
+                                b1_menu.setText(R.string.cubicMeter);
+                                id1 = item1.getItemId();
+                                count(id1,id2);
+                                return true;
                             default:
                                 return false;
                         }
@@ -516,7 +577,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void showPopupMenu2(View v) {
         PopupMenu popupMenu = new PopupMenu(this, v);
-        popupMenu.inflate(R.menu.second_menu);
+        switch (id3){
+            case R.id.lenght:
+                popupMenu.inflate(R.menu.first_menu);
+                break;
+            case R.id.amount:
+                popupMenu.inflate(R.menu.second_menu);
+                break;
+        }
         popupMenu
                 .setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
@@ -597,6 +665,27 @@ public class MainActivity extends AppCompatActivity {
                                 b2_menu.setText(R.string.seamiles);
                                 id2 = item2.getItemId();
                                 count(id1,id2);
+                                return true;
+                            case R.id.milliliter:
+                                b2_menu.setText(R.string.milliliter);
+                                id2 = item2.getItemId();
+                                count(id1,id2);
+                                return true;
+                            case R.id.cc:
+                                b2_menu.setText(R.string.cubicCentimeter);
+                                id2 = item2.getItemId();
+                                count(id1,id2);
+                                return true;
+                            case R.id.liter:
+                                b2_menu.setText(R.string.liter);
+                                id2 = item2.getItemId();
+                                count(id1,id2);
+                                return true;
+                            case R.id.cbm:
+                                b2_menu.setText(R.string.cubicMeter);
+                                id2 = item2.getItemId();
+                                count(id1,id2);
+                                return true;
                             default:
                                 return false;
                         }
@@ -605,7 +694,46 @@ public class MainActivity extends AppCompatActivity {
         popupMenu.show();
     }
 
-   /*@Override
+    public void showPopupMenu3(View v){
+        PopupMenu popupMenu = new PopupMenu(this, v);
+        popupMenu.inflate(R.menu.notaion_menu);
+        popupMenu.
+                setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item3) {
+                        switch (item3.getItemId()) {
+                            case R.id.lenght:
+                                id3=item3.getItemId();
+                                id1 = R.id.menu6;
+                                id2 = R.id.menu6;
+                                stroka="";
+                                raw1=0;
+                                tv1.setText(R.string.enter);
+                                tv2.setText("0");
+                                b3_menu.setText(R.string.lenght);
+                                b1_menu.setText(R.string.meters);
+                                b2_menu.setText(R.string.meters);
+                                break;
+                            case R.id.amount:
+                                id3=item3.getItemId();
+                                id1 = R.id.milliliter;
+                                id2 = R.id.milliliter;
+                                stroka="";
+                                raw1=0;
+                                tv1.setText(R.string.enter);
+                                tv2.setText("0");
+                                b3_menu.setText(R.string.amount);
+                                b1_menu.setText(R.string.milliliter);
+                                b2_menu.setText(R.string.milliliter);
+                                break;
+                        }
+                        return false;
+                    }
+                });
+        popupMenu.show();
+    }
+
+   @Override
     public void onConfigurationChanged(Configuration newConfig) {
         locale = new Locale(lang);
         Locale.setDefault(locale);
@@ -613,7 +741,7 @@ public class MainActivity extends AppCompatActivity {
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config, null);
         super.onConfigurationChanged(newConfig);
-    }*/
+    }
 
 
     class TouchListener implements View.OnTouchListener {
@@ -622,12 +750,18 @@ public class MainActivity extends AppCompatActivity {
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()){
                 case MotionEvent.ACTION_DOWN:
+                    if(b) {
+                        soundPool.play(1, 1, 1, 1, 0, 1);
+                    }
                     switch (v.getId()){
                         case R.id.button1:
                             b1_menu.setBackgroundColor(color_gray);
                             break;
                         case R.id.button2:
                             b2_menu.setBackgroundColor(color_gray);
+                            break;
+                        case R.id.button3:
+                            b3_menu.setBackgroundColor(color_gray);
                             break;
                         case R.id.b0:
                             b0.setBackgroundColor(color_gray);
@@ -637,10 +771,6 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case R.id.b_del:
                             b_del.setBackgroundColor(color_gray);
-                            if(b) {
-                                soundPool.play(1, 1, 1, 1, 0, 1);
-                                break;
-                            }
                             break;
                         case R.id.b1:
                             b1.setBackgroundColor(color_gray);
@@ -685,6 +815,13 @@ public class MainActivity extends AppCompatActivity {
                                 b2_menu.setBackgroundColor(color_keyboard);
                             }else{
                                 b2_menu.setBackgroundColor(color);
+                            }
+                            break;
+                        case R.id.button3:
+                            if(themeId==1) {
+                                b3_menu.setBackgroundColor(color_keyboard);
+                            }else{
+                                b3_menu.setBackgroundColor(color);
                             }
                             break;
                         case R.id.b0:
@@ -733,12 +870,15 @@ public class MainActivity extends AppCompatActivity {
         if(themeId==1) {
             b1_menu.setBackgroundColor(color_keyboard);
             b2_menu.setBackgroundColor(color_keyboard);
+            b3_menu.setBackgroundColor(color_keyboard);
         }else{
             b1_menu.setBackgroundColor(color);
             b2_menu.setBackgroundColor(color);
+            b3_menu.setBackgroundColor(color);
         }
         b1_menu.setTextColor(textColor);
         b2_menu.setTextColor(textColor);
+        b3_menu.setTextColor(textColor);
         tv1.setTextColor(textColor);
         tv2.setTextColor(textColor);
         b_del.setBackgroundColor(color);

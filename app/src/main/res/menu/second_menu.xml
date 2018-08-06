@@ -4,52 +4,20 @@
     <group android:id="@+id/menugroupid">
 
         <item
-            android:title="@string/nanometers"
-            android:id="@+id/menu1" />
+            android:title="@string/milliliter"
+            android:id="@+id/milliliter" />
 
         <item
-            android:title="@string/micrometers"
-            android:id="@+id/menu2" />
+            android:title="@string/cubicCentimeter"
+            android:id="@+id/cc" />
 
         <item
-            android:title="@string/millimeters"
-            android:id="@+id/menu3" />
+            android:title="@string/liter"
+            android:id="@+id/liter" />
 
         <item
-            android:title="@string/centimeters"
-            android:id="@+id/menu4" />
-
-        <item
-            android:title="@string/decimeters"
-            android:id="@+id/menu5" />
-
-        <item
-            android:title="@string/meters"
-            android:id="@+id/menu6" />
-
-        <item
-            android:title="@string/kilometers"
-            android:id="@+id/menu7" />
-
-        <item
-            android:title="@string/inches"
-            android:id="@+id/menu8" />
-
-        <item
-            android:title="@string/foots"
-            android:id="@+id/menu9" />
-
-        <item
-            android:title="@string/yards"
-            android:id="@+id/menu10" />
-
-        <item
-            android:title="@string/miles"
-            android:id="@+id/menu11" />
-
-        <item
-            android:title="@string/seamiles"
-            android:id="@+id/menu12" />
+            android:title="@string/cubicMeter"
+            android:id="@+id/cbm" />
 
     </group>
 
